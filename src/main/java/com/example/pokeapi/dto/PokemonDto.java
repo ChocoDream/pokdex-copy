@@ -13,12 +13,12 @@ public class PokemonDto {
     @JsonProperty("weight")
     private int weight;
     @JsonProperty("game_indices")
-    private String[] games;
+    private Object[] games;
 
     public PokemonDto() {
     }
 
-    public PokemonDto(String name, int height, int weight, String[] games) {
+    public PokemonDto(String name, int height, int weight, Object[] games) {
         this.name = name;
         this.height = height;
         this.weight = weight;
@@ -50,11 +50,11 @@ public class PokemonDto {
         this.weight = weight;
     }
 
-    public List<String> getGames() {
+    public List<Object> getGames() {
         return Arrays.asList(games);
     }
 
-    public void setGames(String[] games) {
+    public void setGames(Object[] games) {
         this.games = games;
     }
 }

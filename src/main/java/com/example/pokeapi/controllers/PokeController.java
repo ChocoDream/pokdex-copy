@@ -1,6 +1,6 @@
 package com.example.pokeapi.controllers;
 
-import com.example.pokeapi.enteties.Pokemon;
+import com.example.pokeapi.Entities.Pokemon;
 import com.example.pokeapi.services.PokeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ public class PokeController {
     private PokeService pokeService;
 
     @GetMapping
-    public ResponseEntity<List<Pokemon>> findpokemon(@RequestParam String name) {
+    public ResponseEntity<List<Pokemon>> findPokemon(@RequestParam String name) {
         var pokemon = pokeService.findAll(name);
         return ResponseEntity.ok(pokemon);
     }

@@ -1,6 +1,6 @@
 package com.example.pokeapi.services;
 
-import com.example.pokeapi.enteties.Pokemon;
+import com.example.pokeapi.Entities.Pokemon;
 import com.example.pokeapi.repositories.PokeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,9 @@ public class PokeService {
     public List<Pokemon> findAll(String name) {
         System.out.println("FRESH DATA...");
         var pokemon = pokeRepository.findAll();
-        pokemon.stream().collect(Collectors.toList());
+            pokemon =   pokemon.stream()
+                        .filter(poke -> poke.getName().toLowerCase().contains(name.toLowerCase()))
+                        .collect(Collectors.toList());
         if (pokemon.isEmpty()) {
             var pokemonDto = pokeConsumerService.search(name);
             if (pokemonDto != null) {
@@ -29,7 +31,9 @@ public class PokeService {
             }
         }
 
-        return pokemon.stream().collect(Collectors.toList());
+        return pokemon.stream()
+                .filter(poke -> poke.getName().toLowerCase().contains(name.toLowerCase()))
+                .collect(Collectors.toList());
     }
 
     public Pokemon findById(String id) {

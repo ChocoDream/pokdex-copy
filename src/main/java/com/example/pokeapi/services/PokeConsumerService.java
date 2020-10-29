@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-@ConfigurationProperties(prefix = "example.pokepi", ignoreInvalidFields = false)
+@ConfigurationProperties(prefix = "example.pokeapi", ignoreInvalidFields = false)
 
 public class PokeConsumerService {
 
