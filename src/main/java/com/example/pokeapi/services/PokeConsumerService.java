@@ -1,6 +1,8 @@
 package com.example.pokeapi.services;
 
 import com.example.pokeapi.dto.PokemonDto;
+import com.example.pokeapi.dto.PokemonListDto;
+import com.example.pokeapi.entities.PokemonList;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,16 @@ public class PokeConsumerService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Pokemon found");
         }
         return pokemon;
+    }
+
+    public PokemonListDto getList () {
+        var urlWithNameQuery = url + "pokemon?limit=1050";
+        var pokemonList = restTemplate.getForObject(urlWithNameQuery, PokemonListDto.class);
+        if(pokemonList == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pokemon list couldn't be populated");
+        }
+
+        return pokemonList;
     }
 
     public void setUrl(String url) {

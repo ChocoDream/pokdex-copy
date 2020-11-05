@@ -1,6 +1,7 @@
 package com.example.pokeapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.List;

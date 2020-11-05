@@ -1,6 +1,8 @@
 package com.example.pokeapi.controllers;
 
-import com.example.pokeapi.Entities.Pokemon;
+import com.example.pokeapi.dto.PokemonListDto;
+import com.example.pokeapi.entities.Pokemon;
+import com.example.pokeapi.services.PokeConsumerService;
 import com.example.pokeapi.services.PokeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,12 +18,15 @@ import java.util.List;
 public class PokeController {
     @Autowired
     private PokeService pokeService;
+    @Autowired
+    private PokeConsumerService pokeConsumerService;
 
     @GetMapping
     public ResponseEntity<List<Pokemon>> findPokemon(@RequestParam String name) {
         var pokemon = pokeService.findAll(name);
         return ResponseEntity.ok(pokemon);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Pokemon> findPokemonById(@PathVariable String id) {
@@ -45,6 +50,12 @@ public class PokeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePokemon(@PathVariable String id) {
         pokeService.delete(id);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<PokemonListDto> getPokemonList() {
+        var pokemonList = pokeConsumerService.getList();
+        return ResponseEntity.ok(pokemonList);
     }
 }
 

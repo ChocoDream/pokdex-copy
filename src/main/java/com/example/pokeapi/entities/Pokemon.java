@@ -1,4 +1,4 @@
-package com.example.pokeapi.Entities;
+package com.example.pokeapi.entities;
 
 import org.springframework.data.annotation.Id;
 
