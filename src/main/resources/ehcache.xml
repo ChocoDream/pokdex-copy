@@ -5,11 +5,11 @@
                 http://www.ehcache.org/v3
                 http://www.ehcache.org/schema/ehcache-core-3.7.xsd">
     <!-- Persistent cache directory -->
-    <persistence directory="spring-boot-ehcache/cache" />
+    <persistence directory="spring-boot-ehcache/cache"/>
     <!-- Default cache template -->
     <cache-template name="default">
         <expiry>
-            <ttl unit="seconds">30</ttl>
+            <ttl unit="seconds">60</ttl>
         </expiry>
         <listeners>
             <listener>
@@ -29,5 +29,7 @@
     </cache-template>
     <!-- Cache configuration -->
     <cache alias="pokemonCache" uses-template="default">
+    </cache>
+    <cache alias="pokemonNamesCache" uses-template="default">
     </cache>
 </config>

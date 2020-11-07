@@ -1,6 +1,5 @@
 package com.example.pokeapi.controllers;
 
-import com.example.pokeapi.dto.PokemonListDto;
 import com.example.pokeapi.entities.Pokemon;
 import com.example.pokeapi.services.PokeConsumerService;
 import com.example.pokeapi.services.PokeService;
@@ -43,7 +42,7 @@ public class PokeController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void updatePokemon(@PathVariable String id, @RequestBody Pokemon pokemon){
+    public void updatePokemon(@PathVariable String id, @RequestBody Pokemon pokemon) {
         pokeService.update(id, pokemon);
     }
 
@@ -51,6 +50,12 @@ public class PokeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePokemon(@PathVariable String id) {
         pokeService.delete(id);
+    }
+
+    @DeleteMapping("/all")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAllPokemon() {
+        pokeService.deleteAllEntries();
     }
 }
 
