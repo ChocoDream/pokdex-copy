@@ -26,6 +26,8 @@ public class PokeService {
     @Autowired
     private PokeConsumerService pokeConsumerService;
 
+
+    @Cacheable(value = "pokemonCache")
     public List<Pokemon> findAll(Map<String, String> query) {
         System.out.println("FRESH DATA...");
         var pokemon = pokemonRepository.findAll();
@@ -127,6 +129,16 @@ public class PokeService {
         return pokemonListRepository.save(pokemonList);
     }
 
+    @CacheEvict(value = "pokemonCache", allEntries = true)
+    public void deleteAllEntries() {
+        if (pokemonRepository.findAll().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "MongoDB Collection is empty");
+        }
+
+        pokemonRepository.deleteAll();
+    }
+
+    @Cacheable(value = "pokemonNamesCache", key = "#name")
     public ArrayList<String> findPokemonByPartialString(String name) {
         ArrayList<String> pokemonList = pokemonListRepository.findByNames("names"); //Doesn't work, HOW!!!
         ArrayList<String> listOfPokemon = new ArrayList<>();
