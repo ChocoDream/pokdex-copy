@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/pokemon")
@@ -22,8 +23,8 @@ public class PokeController {
     private PokeConsumerService pokeConsumerService;
 
     @GetMapping
-    public ResponseEntity<List<Pokemon>> findPokemon(@RequestParam String name) {
-        var pokemon = pokeService.findAll(name);
+    public ResponseEntity<List<Pokemon>> findPokemon(@RequestParam Map<String, String> query) {
+        var pokemon = pokeService.findAll(query);
         return ResponseEntity.ok(pokemon);
     }
 
@@ -50,12 +51,6 @@ public class PokeController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePokemon(@PathVariable String id) {
         pokeService.delete(id);
-    }
-
-    @GetMapping("/list")
-    public ResponseEntity<PokemonListDto> getPokemonList() {
-        var pokemonList = pokeConsumerService.getList();
-        return ResponseEntity.ok(pokemonList);
     }
 }
 

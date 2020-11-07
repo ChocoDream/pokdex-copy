@@ -2,17 +2,19 @@ package com.example.pokeapi.entities;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.ArrayList;
+
 public class PokemonList {
     @Id
     private String id;
-    private Object[] name;
+    private ArrayList<String> names;
 
     public PokemonList() {
 
     }
 
-    public PokemonList(Object[] name) {
-        this.name = name;
+    public PokemonList(ArrayList<String> names) {
+        this.names = names;
     }
 
     public String getId() {
@@ -23,11 +25,11 @@ public class PokemonList {
         this.id = id;
     }
 
-    public Object[] getName() {
-        return name;
+    public ArrayList<String> getNames() {
+        return names;
     }
 
-    public void setName(Object[] name) {
-        this.name = name;
+    public void setNames(ArrayList<String> names) {
+        this.names = names;
     }
 }

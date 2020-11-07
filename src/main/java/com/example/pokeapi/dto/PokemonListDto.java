@@ -27,6 +27,8 @@ public class PokemonListDto {
                 names.add(name);
             }
         }
+
+        Collections.sort(names);
         return names;
     }
 

@@ -37,7 +37,6 @@ public class PokeConsumerService {
         if(pokemonList == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pokemon list couldn't be populated");
         }
-
         return pokemonList;
     }
 
