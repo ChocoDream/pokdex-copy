@@ -27,25 +27,42 @@ public class PokeService {
     private PokeConsumerService pokeConsumerService;
 
     public List<Pokemon> findAll(Map<String, String> query) {
-        List<Pokemon> pokemons;
+        System.out.println("FRESH DATA...");
+        var pokemon = pokemonRepository.findAll();
+
         if (query.containsKey("name")) {
             System.out.println("QUERY FOUND: name");
-            pokemons = findByName(query.get("name"));
-        } else {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Couldn't find any valid queries");
+            pokemon = findByName(pokemon, query.get("name"));
         }
 
-        return pokemons;
+        if (query.containsKey("minWeight")) {
+            System.out.println("QUERY FOUND: minWeight");
+            pokemon = findPokemonByMinWeight(pokemon, Integer.parseInt(query.get("minWeight")));
+        }
+
+        if (query.containsKey("maxWeight")) {
+            System.out.println("QUERY FOUND: maxWeight");
+            pokemon = findPokemonByMaxWeight(pokemon, Integer.parseInt(query.get("maxWeight")));
+        }
+
+        if (query.containsKey("minHeight")) {
+            System.out.println("QUERY FOUND: minHeight");
+            pokemon = findPokemonByMinHeight(pokemon, Integer.parseInt(query.get("minHeight")));
+        }
+
+        if (query.containsKey("maxHeight")) {
+            System.out.println("QUERY FOUND: maxHeight");
+            pokemon = findPokemonByMaxHeight(pokemon, Integer.parseInt(query.get("maxHeight")));
+        }
+
+        return pokemon;
     }
 
     @Cacheable(value = "pokemonCache", key = "#name")
-    public List<Pokemon> findByName(String name) {
+    public List<Pokemon> findByName(List<Pokemon> pokemon, String name) {
         if (name.length() < 3) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A name search must contain 3 characters");
         }
-
-        System.out.println("FRESH DATA...");
-        var pokemon = pokemonRepository.findAll();
         pokemon = pokemon.stream()
                 .filter(poke -> poke.getName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
@@ -132,7 +149,30 @@ public class PokeService {
         return listOfPokemon;
     }
 
-    
+    public List<Pokemon> findPokemonByMinWeight(List<Pokemon> pokemon, int minWeight) {
+        return pokemon.stream()
+                .filter(poke -> poke.getWeight() >= minWeight)
+                .collect(Collectors.toList());
+    }
+
+    public List<Pokemon> findPokemonByMaxWeight(List<Pokemon> pokemon, int maxWeight) {
+        return pokemon.stream()
+                .filter(poke -> poke.getWeight() <= maxWeight)
+                .collect(Collectors.toList());
+    }
+
+    public List<Pokemon> findPokemonByMinHeight(List<Pokemon> pokemon, int minHeight) {
+        return pokemon.stream()
+                .filter(poke -> poke.getHeight() >= minHeight)
+                .collect(Collectors.toList());
+    }
+
+    public List<Pokemon> findPokemonByMaxHeight(List<Pokemon> pokemon, int maxHeight) {
+        return pokemon.stream()
+                .filter(poke -> poke.getHeight() <= maxHeight)
+                .collect(Collectors.toList());
+    }
+
 }
 
 
