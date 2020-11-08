@@ -3,8 +3,6 @@ package com.example.pokeapi.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public class PokemonDto {
@@ -54,10 +52,10 @@ public class PokemonDto {
 
     public ArrayList<String> getGames() {
         ArrayList<String> parsedGames = new ArrayList<>();
-        for (Object baseObject : games){
+        for (Object baseObject : games) {
             Map<String, String> object = (Map<String, String>) baseObject;
             Map<String, String> childObject = (Map<String, String>) object.values().toArray()[1];
-            if(!childObject.get("name").isBlank()) {
+            if (!childObject.get("name").isEmpty()) {
                 parsedGames.add(childObject.get("name"));
             }
         }
