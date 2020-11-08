@@ -3,7 +3,9 @@ package com.example.pokeapi.entities;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Pokemon implements Serializable {
     @Id
@@ -11,14 +13,14 @@ public class Pokemon implements Serializable {
     private String name;
     private int height;
     private int weight;
-    private List<Object> games;
+    private List<String> games;
 
 
     public Pokemon() {
 
     }
 
-    public Pokemon(String name, int height, int weight, List<Object> games) {
+    public Pokemon(String name, int height, int weight, List<String> games) {
         this.name = name;
         this.height = height;
         this.weight = weight;
@@ -57,11 +59,11 @@ public class Pokemon implements Serializable {
         this.weight = weight;
     }
 
-    public List<Object> getGames() {
+    public List<String> getGames() {
         return games;
     }
 
-    public void setGames(List<Object> games) {
+    public void setGames(List<String> games) {
         this.games = games;
     }
 

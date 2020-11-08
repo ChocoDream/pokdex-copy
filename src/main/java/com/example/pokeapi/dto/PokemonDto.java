@@ -1,10 +1,9 @@
 package com.example.pokeapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.json.JSONObject;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class PokemonDto {
     @JsonProperty("name")
@@ -51,8 +50,16 @@ public class PokemonDto {
         this.weight = weight;
     }
 
-    public List<Object> getGames() {
-        return Arrays.asList(games);
+    public ArrayList<String> getGames() {
+        ArrayList<String> parsedGames = new ArrayList<>();
+        for (Object baseObject : games) {
+            Map<String, String> object = (Map<String, String>) baseObject;
+            Map<String, String> childObject = (Map<String, String>) object.values().toArray()[1];
+            if (!childObject.get("name").isEmpty()) {
+                parsedGames.add(childObject.get("name"));
+            }
+        }
+        return parsedGames;
     }
 
     public void setGames(Object[] games) {

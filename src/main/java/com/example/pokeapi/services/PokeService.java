@@ -33,47 +33,40 @@ public class PokeService {
         var pokemon = pokemonRepository.findAll();
 
         if (query.containsKey("name")) {
-            System.out.println("QUERY FOUND: name");
             pokemon = findByName(pokemon, query.get("name"));
         }
 
         if (query.containsKey("minWeight")) {
-            System.out.println("QUERY FOUND: minWeight");
             pokemon = findPokemonByMinWeight(pokemon, Integer.parseInt(query.get("minWeight")));
         }
 
         if (query.containsKey("maxWeight")) {
-            System.out.println("QUERY FOUND: maxWeight");
             pokemon = findPokemonByMaxWeight(pokemon, Integer.parseInt(query.get("maxWeight")));
         }
 
         if (query.containsKey("minHeight")) {
-            System.out.println("QUERY FOUND: minHeight");
             pokemon = findPokemonByMinHeight(pokemon, Integer.parseInt(query.get("minHeight")));
         }
 
         if (query.containsKey("maxHeight")) {
-            System.out.println("QUERY FOUND: maxHeight");
             pokemon = findPokemonByMaxHeight(pokemon, Integer.parseInt(query.get("maxHeight")));
         }
 
+        if (pokemon.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No Pokemon found");
+        }
         return pokemon;
     }
 
     @Cacheable(value = "pokemonCache", key = "#name")
     public List<Pokemon> findByName(List<Pokemon> pokemon, String name) {
         if (name.length() < 3) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A name search must contain 3 characters");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A name search must contain more than 3 characters");
         }
         pokemon = pokemon.stream()
                 .filter(poke -> poke.getName().toLowerCase().contains(name.toLowerCase()))
                 .collect(Collectors.toList());
         if (pokemon.isEmpty()) {
-            /*var pokemonDto = pokeConsumerService.search(name);
-            if (pokemonDto != null) {
-                var _pokemon = new Pokemon(pokemonDto.getName(), pokemonDto.getHeight(), pokemonDto.getWeight(), pokemonDto.getGames());
-                pokemon.add(this.save(_pokemon));
-            } OLD WAY TO FIND ONE*/
             var list = this.findPokemonByPartialString(name); //Implemented the way to find several pokemon
             for (var pokemonName : list) {
                 var pokemonDto = pokeConsumerService.search(pokemonName);
@@ -92,15 +85,9 @@ public class PokeService {
 
     @Cacheable(value = "pokemonCache", key = "#id")
     public Pokemon findById(String id) {
-        var pokemon = pokemonRepository.findById(id);
-        if (pokemon.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sorry, couldn't find Pokemon");
-        }
-
-        return pokemon.get();
+        return pokemonRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Couldn't find Pokemon by id: " + id));
     }
 
-    //@CacheEvict(value = "pokeCache", allEntries = true)
     @CachePut(value = "pokemonCache", key = "#result.id")
     public Pokemon save(Pokemon pokemon) {
         return pokemonRepository.save(pokemon);
@@ -132,7 +119,7 @@ public class PokeService {
     @CacheEvict(value = "pokemonCache", allEntries = true)
     public void deleteAllEntries() {
         if (pokemonRepository.findAll().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NO_CONTENT, "MongoDB Collection is empty");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "MongoDB Collection is empty");
         }
 
         pokemonRepository.deleteAll();
