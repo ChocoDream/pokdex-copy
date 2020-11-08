@@ -2,7 +2,6 @@ package com.example.pokeapi.services;
 
 import com.example.pokeapi.entities.User;
 import com.example.pokeapi.repositories.UserRepository;
-import org.json.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,9 +52,9 @@ public class UserService {
 
         var currentUser = getCurrentUser();
 
-        if(!isUsernameAdmin(currentUser)){
-            if(!currentUser.equals(user.getUsername())){
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not allowed to update someone else's username");
+        if (!isUsernameAdmin(currentUser)) {
+            if (!currentUser.equals(user.getUsername())) {
+                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not allowed to update someone else's username");
             }
         }
         user.setId(id);

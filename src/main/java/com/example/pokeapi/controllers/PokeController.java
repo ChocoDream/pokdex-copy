@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -34,6 +35,7 @@ public class PokeController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @Secured("ROLE_USER")
     public ResponseEntity<Pokemon> savePokemon(@RequestBody Pokemon pokemon) {
         var savedPokemon = pokeService.save(pokemon);
         var uri = URI.create("/api/v1/pokemon" + savedPokemon.getId());
@@ -41,18 +43,21 @@ public class PokeController {
     }
 
     @PutMapping("/{id}")
+    @Secured("ROLE_ADMIN")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void updatePokemon(@PathVariable String id, @RequestBody Pokemon pokemon) {
         pokeService.update(id, pokemon);
     }
 
     @DeleteMapping("/{id}")
+    @Secured("ROLE_ADMIN")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePokemon(@PathVariable String id) {
         pokeService.delete(id);
     }
 
     @DeleteMapping("/all")
+    @Secured("ROLE_ADMIN")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllPokemon() {
         pokeService.deleteAllEntries();
