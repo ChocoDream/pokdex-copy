@@ -22,7 +22,7 @@ public class UserService {
     public List<User> findAll(String username) {
         if (username != null) {
             var user = userRepository.findByUsername(username).orElseThrow(
-                    () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Could not found user by username %s.", username)));
+                    () -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("User not found by username %s.", username)));
             return List.of(user);
         }
         return userRepository.findAll();
@@ -33,12 +33,12 @@ public class UserService {
     }
 
     public User findById(String id) {
-        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Username not found by id: " + id));
+        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found by id: " + id));
     }
 
     public User save(User user) {
         if (StringUtils.isEmpty(user.getPassword())) { // user.getPassword() == null || user.getPassword().isEmpty()
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username needs a password");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User needs a password");
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -54,7 +54,7 @@ public class UserService {
 
         if (!isUsernameAdmin(currentUser)) {
             if (!currentUser.equals(user.getUsername())) {
-                throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not allowed to update someone else's username");
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only allowed to edit your own information");
             }
         }
         user.setId(id);
