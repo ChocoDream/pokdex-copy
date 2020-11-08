@@ -92,12 +92,7 @@ public class PokeService {
 
     @Cacheable(value = "pokemonCache", key = "#id")
     public Pokemon findById(String id) {
-        var pokemon = pokemonRepository.findById(id);
-        if (pokemon.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Sorry, couldn't find Pokemon");
-        }
-
-        return pokemon.get();
+        return pokemonRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Couldn't find Pokemon by id: " + id));
     }
 
     //@CacheEvict(value = "pokeCache", allEntries = true)
